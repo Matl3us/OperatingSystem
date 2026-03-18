@@ -1,16 +1,19 @@
 CC = i686-elf-g++
 CFLAGS = -ffreestanding -O2 -Wall -Wextra
 
+SRCS = $(wildcard kernel/*.cpp kernel/**/*.cpp)
+OBJS = $(SRCS:.cpp=.o)
+
 all: myos.iso
 
 boot.o: kernel/boot.asm
 	nasm -f elf32 kernel/boot.asm -o boot.o
 
-kernel.o: kernel/kernel.cpp
-	$(CC) $(CFLAGS) -c kernel/kernel.cpp -o kernel.o
+%.o: %.cpp 
+	$(CC) $(CFLAGS) -c $< -o $@
 
-myos.bin: boot.o kernel.o
-	$(CC) -T kernel/linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o
+myos.bin: boot.o $(OBJS) 
+	$(CC) -T kernel/linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o $(OBJS)
 
 myos.iso: myos.bin
 	mkdir -p build/boot/grub
@@ -22,5 +25,6 @@ run: myos.iso
 	qemu-system-i386 -cdrom myos.iso
 
 clean:
-	rm -f *.o *.bin *.iso
+	find . -name "*.o" -delete
+	rm -f *.bin *.iso
 	rm -rf build 
