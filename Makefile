@@ -9,11 +9,14 @@ all: myos.iso
 boot.o: kernel/boot.asm
 	nasm -f elf32 kernel/boot.asm -o boot.o
 
+gdt_flush.o: kernel/gdt_flush.asm
+	nasm -f elf32 kernel/gdt_flush.asm -o gdt_flush.o
+
 %.o: %.cpp 
 	$(CC) $(CFLAGS) -c $< -o $@
 
-myos.bin: boot.o $(OBJS) 
-	$(CC) -T kernel/linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o $(OBJS)
+myos.bin: boot.o gdt_flush.o $(OBJS) 
+	$(CC) -T kernel/linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o gdt_flush.o $(OBJS)
 
 myos.iso: myos.bin
 	mkdir -p build/boot/grub

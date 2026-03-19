@@ -2,7 +2,7 @@
 
 ## Multiboot Specification
 
-**Source:** https://www.gnu.org/software/grub/manual/multiboot/multiboot.html
+-  https://www.gnu.org/software/grub/manual/multiboot/multiboot.html
 
 ### Header Constants
 
@@ -13,3 +13,8 @@
 | `MEMINFO` | `1<<1` (= 2) | Bit 1 — tells GRUB to provide a memory map (how much RAM exists) |
 | `FLAGS` | `ALIGN \| MEMINFO` (= 3) | Combined flags field sent to GRUB |
 | `CHECKSUM` | `-(MAGIC + FLAGS)` | Must satisfy: MAGIC + FLAGS + CHECKSUM == 0 |
+
+## Global Descriptor Table
+
+- https://wiki.osdev.org/Global_Descriptor_Table
+- https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html
