@@ -3,7 +3,7 @@ global gdt_flush
 
 gdt_flush:
     mov eax, [esp + 4]  ; Get GDTPointer address passed as argument
-    lgdt [eax]          ; load it into the CPU's GDT register
+    lgdt [eax]          ; load it into the CPU's GDTR register
 
     mov ax, 0x10        ; 0x10 - entry 2 (Kernel data segment) 
     mov ds, ax          ; Reload data segment registers

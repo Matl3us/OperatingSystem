@@ -25,7 +25,7 @@ myos.iso: myos.bin
 	grub-mkrescue -o myos.iso build 
 
 run: myos.iso
-	qemu-system-i386 -cdrom myos.iso
+	qemu-system-i386 -cdrom myos.iso -serial stdio
 
 clean:
 	find . -name "*.o" -delete
