@@ -1,22 +1,22 @@
 CC = i686-elf-g++
-CFLAGS = -ffreestanding -O2 -Wall -Wextra
+CFLAGS = -ffreestanding -O1 -Wall -Wextra
 
-SRCS = $(wildcard kernel/*.cpp kernel/**/*.cpp)
-OBJS = $(SRCS:.cpp=.o)
+SRCS_CPP = $(wildcard kernel/*.cpp kernel/**/*.cpp)
+OBJS_CPP = $(SRCS_CPP:.cpp=.o)
+
+SRCS_ASM = $(wildcard kernel/*.asm kernel/**/*.asm)
+OBJS_ASM = $(SRCS_ASM:.asm=.asm.o)
 
 all: myos.iso
 
-boot.o: kernel/boot.asm
-	nasm -f elf32 kernel/boot.asm -o boot.o
-
-gdt_flush.o: kernel/gdt_flush.asm
-	nasm -f elf32 kernel/gdt_flush.asm -o gdt_flush.o
+%.asm.o: %.asm
+	nasm -f elf32 $< -o $@
 
 %.o: %.cpp 
 	$(CC) $(CFLAGS) -c $< -o $@
 
-myos.bin: boot.o gdt_flush.o $(OBJS) 
-	$(CC) -T kernel/linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o gdt_flush.o $(OBJS)
+myos.bin: $(OBJS_ASM) $(OBJS_CPP) 
+	$(CC) -T kernel/linker.ld -o myos.bin -ffreestanding -O1 -nostdlib $(OBJS_ASM) $(OBJS_CPP)
 
 myos.iso: myos.bin
 	mkdir -p build/boot/grub
