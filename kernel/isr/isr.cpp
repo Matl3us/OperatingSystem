@@ -36,7 +36,7 @@ static const char *exception_names[] = {
     "Reserved",
     "Reserved"};
 
-extern "C" void isr_handler(InterruptFrame *frame)
+extern "C" void isr_handler(InterruptFrameISR *frame)
 {
     serial_write("Exception: ");
     serial_write(exception_names[frame->exception_number]);
@@ -48,7 +48,7 @@ extern "C" void isr_handler(InterruptFrame *frame)
 extern "C" void isr0();
 extern "C" void isr1();
 extern "C" void isr2();
-extern "C" void isr3();
+extern "C" void irq3();
 extern "C" void isr4();
 extern "C" void isr5();
 extern "C" void isr6();
@@ -83,7 +83,7 @@ void isr_init()
     idt_set_entry(0, (uint32_t)isr0);
     idt_set_entry(1, (uint32_t)isr1);
     idt_set_entry(2, (uint32_t)isr2);
-    idt_set_entry(3, (uint32_t)isr3);
+    idt_set_entry(3, (uint32_t)irq3);
     idt_set_entry(4, (uint32_t)isr4);
     idt_set_entry(5, (uint32_t)isr5);
     idt_set_entry(6, (uint32_t)isr6);
@@ -112,6 +112,4 @@ void isr_init()
     idt_set_entry(29, (uint32_t)isr29);
     idt_set_entry(30, (uint32_t)isr30);
     idt_set_entry(31, (uint32_t)isr31);
-
-    idt_flush_now();
 }

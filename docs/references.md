@@ -18,3 +18,11 @@
 
 - https://wiki.osdev.org/Global_Descriptor_Table
 - https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html
+
+## Interrupt Descriptor Table
+
+- https://wiki.osdev.org/Interrupt_Descriptor_Table
+
+## Programmable Interrupt Controller
+
+- https://wiki.osdev.org/8259_PIC

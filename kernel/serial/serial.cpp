@@ -1,18 +1,7 @@
 #include "serial.h"
+#include "../io.h"
 
 #define COM1 0x3F8
-
-static inline void outb(uint16_t port, uint8_t value) // Assembly output bute
-{
-    asm volatile("outb %0, %1" : : "a"(value), "Nd"(port));
-}
-
-static inline uint8_t inb(uint16_t port) // Assembly input byte
-{
-    uint8_t ret;
-    asm volatile("inb %1, %0" : "=a"(ret) : "Nd"(port));
-    return ret;
-}
 
 void serial_init()
 {
@@ -42,5 +31,25 @@ void serial_write(const char *str)
     while (*str)
     {
         serial_putchar(*str++);
+    }
+}
+
+void serial_write_int(uint32_t n)
+{
+    if (n == 0)
+        serial_putchar('0');
+
+    char buffer[10];
+    int idx = 0;
+    while (n > 0)
+    {
+        buffer[idx++] = (n % 10) + '0';
+        n /= 10;
+    }
+
+    idx -= 1;
+    while (idx >= 0)
+    {
+        serial_putchar(buffer[idx--]);
     }
 }

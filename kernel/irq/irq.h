@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 
-struct InterruptFrameISR
+struct InterruptFrameIRQ
 {
     uint32_t edi; // Registers
     uint32_t esi;
@@ -11,8 +11,7 @@ struct InterruptFrameISR
     uint32_t edx;
     uint32_t ecx;
     uint32_t eax;
-    uint32_t exception_number;
-    uint32_t error_code;
+    uint32_t irq_number;
 } __attribute__((packed));
 
-void isr_init();
+void irq_init();

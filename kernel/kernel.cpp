@@ -3,6 +3,8 @@
 #include "gdt/gdt.h"
 #include "idt/idt.h"
 #include "isr/isr.h"
+#include "pic/pic.h"
+#include "irq/irq.h"
 
 extern "C" void kernel_main()
 {
@@ -15,8 +17,17 @@ extern "C" void kernel_main()
     idt_init();
     serial_write("IDT initialized\n");
 
+    pic_init();
+    serial_write("PIC initialized\n");
+
     isr_init();
     serial_write("ISR initialized\n");
+
+    irq_init();
+    serial_write("IRQ initialized\n");
+
+    idt_flush_now();
+    serial_write("IDT flushed\n");
 
     terminal_initialize();
     serial_write("VGA terminal initialized\n");
