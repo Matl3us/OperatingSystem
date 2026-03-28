@@ -1,8 +1,8 @@
 #include "terminal/terminal.h"
 #include "serial/serial.h"
-#include "gdt.h"
-#include "idt.h"
-#include "isr.h"
+#include "gdt/gdt.h"
+#include "idt/idt.h"
+#include "isr/isr.h"
 
 extern "C" void kernel_main()
 {

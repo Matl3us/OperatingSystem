@@ -1,6 +1,6 @@
 #include "isr.h"
-#include "idt.h"
-#include "serial/serial.h"
+#include "../idt/idt.h"
+#include "../serial/serial.h"
 
 static const char *exception_names[] = {
     "Division by zero",
