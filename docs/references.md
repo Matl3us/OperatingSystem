@@ -26,3 +26,7 @@
 ## Programmable Interrupt Controller
 
 - https://wiki.osdev.org/8259_PIC
+
+## Programmable Interval Timer
+
+- https://wiki.osdev.org/Programmable_Interval_Timer

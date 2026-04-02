@@ -2,39 +2,38 @@
 #include "../idt/idt.h"
 #include "../serial/serial.h"
 
-static const char *exception_names[] = {
-    "Division by zero",
-    "Debug",
-    "Non-maskable interrupt",
-    "Breakpoint",
-    "Overflow",
-    "Bound range exceeded",
-    "Invalid opcode",
-    "Device not available",
-    "Double fault",
-    "Coprocessor segment overrun",
-    "Invalid TSS",
-    "Segment not present",
-    "Stack segment fault",
-    "General protection fault",
-    "Page fault",
-    "Reserved",
-    "x87 floating point",
-    "Alignment check",
-    "Machine check",
-    "SIMD floating point",
-    "Virtualization",
-    "Control protection",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved"};
+static const char *exception_names[] = {"Division by zero",
+                                        "Debug",
+                                        "Non-maskable interrupt",
+                                        "Breakpoint",
+                                        "Overflow",
+                                        "Bound range exceeded",
+                                        "Invalid opcode",
+                                        "Device not available",
+                                        "Double fault",
+                                        "Coprocessor segment overrun",
+                                        "Invalid TSS",
+                                        "Segment not present",
+                                        "Stack segment fault",
+                                        "General protection fault",
+                                        "Page fault",
+                                        "Reserved",
+                                        "x87 floating point",
+                                        "Alignment check",
+                                        "Machine check",
+                                        "SIMD floating point",
+                                        "Virtualization",
+                                        "Control protection",
+                                        "Reserved",
+                                        "Reserved",
+                                        "Reserved",
+                                        "Reserved",
+                                        "Reserved",
+                                        "Reserved",
+                                        "Reserved",
+                                        "Reserved",
+                                        "Reserved",
+                                        "Reserved"};
 
 extern "C" void isr_handler(InterruptFrameISR *frame)
 {
@@ -48,7 +47,7 @@ extern "C" void isr_handler(InterruptFrameISR *frame)
 extern "C" void isr0();
 extern "C" void isr1();
 extern "C" void isr2();
-extern "C" void irq3();
+extern "C" void isr3();
 extern "C" void isr4();
 extern "C" void isr5();
 extern "C" void isr6();
@@ -83,7 +82,7 @@ void isr_init()
     idt_set_entry(0, (uint32_t)isr0);
     idt_set_entry(1, (uint32_t)isr1);
     idt_set_entry(2, (uint32_t)isr2);
-    idt_set_entry(3, (uint32_t)irq3);
+    idt_set_entry(3, (uint32_t)isr3);
     idt_set_entry(4, (uint32_t)isr4);
     idt_set_entry(5, (uint32_t)isr5);
     idt_set_entry(6, (uint32_t)isr6);

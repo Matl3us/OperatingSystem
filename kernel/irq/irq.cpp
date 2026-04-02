@@ -1,13 +1,22 @@
 #include "irq.h"
 #include "../idt/idt.h"
 #include "../pic/pic.h"
+#include "../pit/pit.h"
 #include "../serial/serial.h"
 
 extern "C" void irq_handler(InterruptFrameIRQ *frame)
 {
-    serial_write("IRQ number: ");
-    serial_write_int(frame->irq_number);
-    serial_putchar('\n');
+    if (frame->irq_number == 0)
+    {
+        pit_handler();
+    }
+    else
+    {
+        serial_write("IRQ number: ");
+        serial_write_int(frame->irq_number);
+        serial_putchar('\n');
+    }
+
     pic_send_eoi(frame->irq_number);
 }
 

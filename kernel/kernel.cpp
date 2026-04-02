@@ -1,10 +1,11 @@
-#include "terminal/terminal.h"
-#include "serial/serial.h"
 #include "gdt/gdt.h"
 #include "idt/idt.h"
+#include "irq/irq.h"
 #include "isr/isr.h"
 #include "pic/pic.h"
-#include "irq/irq.h"
+#include "pit/pit.h"
+#include "serial/serial.h"
+#include "terminal/terminal.h"
 
 extern "C" void kernel_main()
 {
@@ -29,8 +30,18 @@ extern "C" void kernel_main()
     idt_flush_now();
     serial_write("IDT flushed\n");
 
+    pit_init();
+    serial_write("PIT initialized\n");
+
+    asm volatile("sti");
+
     terminal_initialize();
     serial_write("VGA terminal initialized\n");
 
     terminal_write("Hello Kernel!\n");
+
+    while (true)
+    {
+        asm volatile("hlt");
+    }
 }
