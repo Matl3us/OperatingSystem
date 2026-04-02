@@ -30,3 +30,7 @@
 ## Programmable Interval Timer
 
 - https://wiki.osdev.org/Programmable_Interval_Timer
+
+## Keyboard Driver
+
+- http://wiki.osdev.org/PS/2_Keyboard
