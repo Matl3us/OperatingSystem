@@ -1,6 +1,6 @@
 #include "terminal.h"
 #include "../io.h"
-#include <cstdint>
+#include <stdint.h>
 
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
@@ -38,48 +38,42 @@ void terminal_update_cursor()
 
 void terminal_putchar(char c, uint8_t fg, uint8_t bg)
 {
-    if (c == '\n')
+    switch (c)
     {
-        terminal_col = 0;
-        if (++terminal_row == VGA_HEIGHT)
-            terminal_row = 0;
-        terminal_update_cursor();
-        return;
-    }
-
-    if (c == '\t')
-    {
-        terminal_col += 4 - (terminal_col % 4);
-        if (terminal_col > VGA_WIDTH)
-            terminal_col = VGA_WIDTH;
-        terminal_update_cursor();
-        return;
-    }
-
-    if (c == '\b')
-    {
-        if (terminal_col > 0)
-        {
-            terminal_col--;
+        case '\n':
+            terminal_col = 0;
+            if (++terminal_row == VGA_HEIGHT)
+                terminal_row = 0;
+            break;
+        case '\t':
+            terminal_col += 4 - (terminal_col % 4);
+            if (terminal_col > VGA_WIDTH)
+                terminal_col = VGA_WIDTH;
+            break;
+        case '\b':
+            if (terminal_col > 0)
+            {
+                terminal_col--;
+                uint16_t *address =
+                    VGA_START + (terminal_row * VGA_WIDTH + terminal_col);
+                uint8_t color = calculate_color(fg, bg);
+                *address = calculate_char(' ', color);
+            }
+            break;
+        default:
             uint16_t *address =
                 VGA_START + (terminal_row * VGA_WIDTH + terminal_col);
             uint8_t color = calculate_color(fg, bg);
-            *address = calculate_char(' ', color);
-        }
-        terminal_update_cursor();
-        return;
+            *address = calculate_char(c, color);
+
+            if (++terminal_col == VGA_WIDTH)
+            {
+                terminal_col = 0;
+                if (++terminal_row == VGA_HEIGHT)
+                    terminal_row = 0;
+            }
     }
 
-    uint16_t *address = VGA_START + (terminal_row * VGA_WIDTH + terminal_col);
-    uint8_t color = calculate_color(fg, bg);
-    *address = calculate_char(c, color);
-
-    if (++terminal_col == VGA_WIDTH)
-    {
-        terminal_col = 0;
-        if (++terminal_row == VGA_HEIGHT)
-            terminal_row = 0;
-    }
     terminal_update_cursor();
 }
 
