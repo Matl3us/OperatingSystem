@@ -4,11 +4,16 @@
 #include "isr/isr.h"
 #include "pic/pic.h"
 #include "pit/pit.h"
+#include "pmm/pmm.h"
 #include "serial/serial.h"
 #include "terminal/terminal.h"
+#include <stdint.h>
 
-extern "C" void kernel_main()
+extern "C" void kernel_main(uint32_t magic, MultibootInfo *mbi)
 {
+    if (magic != 0x2BADB002)
+        asm volatile("hlt");
+
     serial_init();
     serial_write("Kernel booted\n");
 
@@ -29,6 +34,9 @@ extern "C" void kernel_main()
 
     idt_flush_now();
     serial_write("IDT flushed\n");
+
+    pmm_init(mbi);
+    serial_write("PMM initialized\n");
 
     pit_init();
     serial_write("PIT initialized\n");

@@ -25,6 +25,8 @@ global _start
 extern kernel_main
 _start:
     mov esp, stack_top
+    push ebx
+    push eax
     call kernel_main
 
     cli
