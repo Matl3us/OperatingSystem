@@ -1,5 +1,6 @@
 #include "keyboard.h"
 #include "../io.h"
+#include "../shell/shell.h"
 #include "../terminal/terminal.h"
 #include <stdint.h>
 
@@ -23,4 +24,5 @@ void keyboard_handler()
         return;
 
     terminal_putchar(symbol);
+    shell_handle_char(symbol);
 }
