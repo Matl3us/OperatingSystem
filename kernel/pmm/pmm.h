@@ -1,6 +1,13 @@
 #pragma once
 #include <stdint.h>
 
+#define PAGE_SIZE 4096    // 4KB
+#define BITMAP_SIZE 16384 // 512MB RAM
+
+extern uint32_t total_pages;
+extern uint32_t free_pages;
+extern uint32_t actual_pages;
+
 struct MultibootInfo
 {
     uint32_t flags; // Bitmask for valid fields in struct

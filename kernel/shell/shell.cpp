@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "../pit/pit.h"
+#include "../pmm/pmm.h"
 #include "../string.h"
 #include "../terminal/terminal.h"
 #include <stdint.h>
@@ -22,6 +23,12 @@ void shell_execute(const char *cmd)
         terminal_write("Time since the start of the OS: ");
         terminal_write_int(ticks / 100);
         terminal_write(" s\n");
+        terminal_write("Memory used: ");
+        terminal_write_int((actual_pages - free_pages) * PAGE_SIZE /
+                           (1024 * 1024));
+        terminal_write(" / ");
+        terminal_write_int(actual_pages * PAGE_SIZE / (1024 * 1024));
+        terminal_write(" MB\n");
     }
     else
     {
