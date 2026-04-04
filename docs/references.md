@@ -34,3 +34,7 @@
 ## Keyboard Driver
 
 - http://wiki.osdev.org/PS/2_Keyboard
+
+## Memory paging
+
+- https://wiki.osdev.org/Paging

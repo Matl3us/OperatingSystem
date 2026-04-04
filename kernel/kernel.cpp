@@ -2,6 +2,7 @@
 #include "idt/idt.h"
 #include "irq/irq.h"
 #include "isr/isr.h"
+#include "paging/paging.h"
 #include "pic/pic.h"
 #include "pit/pit.h"
 #include "pmm/pmm.h"
@@ -37,6 +38,9 @@ extern "C" void kernel_main(uint32_t magic, MultibootInfo *mbi)
 
     pmm_init(mbi);
     serial_write("PMM initialized\n");
+
+    paging_init();
+    serial_write("Paging initialized\n");
 
     pit_init();
     serial_write("PIT initialized\n");
