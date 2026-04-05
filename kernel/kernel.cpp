@@ -1,4 +1,5 @@
 #include "gdt/gdt.h"
+#include "heap/heap.h"
 #include "idt/idt.h"
 #include "irq/irq.h"
 #include "isr/isr.h"
@@ -44,6 +45,8 @@ extern "C" void kernel_main(uint32_t magic, MultibootInfo *mbi)
 
     pit_init();
     serial_write("PIT initialized\n");
+
+    heap_init();
 
     asm volatile("sti");
 
