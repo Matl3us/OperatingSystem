@@ -5,3 +5,4 @@ void serial_init();
 void serial_putchar(char c);
 void serial_write(const char *str);
 void serial_write_int(uint32_t n);
+void serial_write_hex(uint32_t n);

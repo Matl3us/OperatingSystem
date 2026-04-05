@@ -37,9 +37,27 @@ static const char *exception_names[] = {"Division by zero",
 
 extern "C" void isr_handler(InterruptFrameISR *frame)
 {
+    uint32_t cr2;
+
     serial_write("Exception: ");
     serial_write(exception_names[frame->exception_number]);
     serial_putchar('\n');
+
+    switch (frame->exception_number)
+    {
+        case 14:
+            serial_write(frame->error_code >> 1 & 1 ? "Write to "
+                                                    : "Read from ");
+            serial_write(frame->error_code >> 0 & 1 ? "protected page "
+                                                    : "non-present page ");
+            serial_write("at address: ");
+
+            asm volatile("mov %%cr2, %0" : "=r"(cr2));
+            serial_write_hex(cr2);
+            serial_putchar('\n');
+            break;
+    }
+
     while (true)
         ;
 }

@@ -14,10 +14,7 @@ void serial_init()
     outb(COM1 + 4, 0x0B); // IRQs enabled, RTS/DSR set
 }
 
-static int serial_is_ready()
-{
-    return inb(COM1 + 5) & 0x20;
-}
+static int serial_is_ready() { return inb(COM1 + 5) & 0x20; }
 
 void serial_putchar(char c)
 {
@@ -37,7 +34,10 @@ void serial_write(const char *str)
 void serial_write_int(uint32_t n)
 {
     if (n == 0)
+    {
         serial_putchar('0');
+        return;
+    }
 
     char buffer[10];
     int idx = 0;
@@ -45,6 +45,32 @@ void serial_write_int(uint32_t n)
     {
         buffer[idx++] = (n % 10) + '0';
         n /= 10;
+    }
+
+    idx -= 1;
+    while (idx >= 0)
+    {
+        serial_putchar(buffer[idx--]);
+    }
+}
+
+void serial_write_hex(uint32_t n)
+{
+    serial_write("0x");
+
+    if (n == 0)
+    {
+        serial_putchar('0');
+        return;
+    }
+
+    char buffer[8];
+    int idx = 0;
+    while (n > 0)
+    {
+        uint8_t remainder = n % 16;
+        buffer[idx++] = remainder < 10 ? remainder + '0' : remainder - 10 + 'A';
+        n /= 16;
     }
 
     idx -= 1;
