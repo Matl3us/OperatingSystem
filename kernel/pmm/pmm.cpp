@@ -5,8 +5,8 @@
 static uint8_t bitmap[BITMAP_SIZE];
 extern uint32_t _kernel_end;
 
-uint32_t total_pages = BITMAP_SIZE * 8;
-uint32_t actual_pages = 0;
+uint32_t total_pages = 0;
+uint32_t available_pages = 0;
 uint32_t free_pages = 0;
 
 void pmm_init(MultibootInfo *mbi)
@@ -25,13 +25,14 @@ void pmm_init(MultibootInfo *mbi)
     for (uint32_t size = 0; size < mbi->mmap_length;)
     {
         MemMapEntry *entry = (MemMapEntry *)(mem_address + size);
+        total_pages += entry->length / PAGE_SIZE;
 
         if (entry->type == 1)
         {
             int firstPage = entry->address / PAGE_SIZE;
             int pagesCount = entry->length / PAGE_SIZE;
             free_pages += pagesCount;
-            actual_pages += pagesCount;
+            available_pages += pagesCount;
             for (int i = firstPage; i < firstPage + pagesCount; i++)
             {
                 bitmap[i / 8] |= (1 << (i % 8));
@@ -44,7 +45,7 @@ void pmm_init(MultibootInfo *mbi)
     uintptr_t kernel_end_ptr = (uintptr_t)&_kernel_end;
     int kernel_used_pages = kernel_end_ptr / PAGE_SIZE;
     free_pages -= kernel_used_pages;
-    actual_pages -= kernel_used_pages;
+    available_pages -= kernel_used_pages;
     for (int i = 0; i < kernel_used_pages; i++)
         bitmap[i / 8] &= ~(1 << (i % 8));
 }
@@ -71,4 +72,19 @@ void pmm_free_page(void *address)
     int page = (uintptr_t)address / PAGE_SIZE;
     bitmap[page / 8] |= (1 << (page % 8));
     free_pages++;
+}
+
+uint32_t pmm_get_total_pages()
+{
+    return total_pages;
+}
+
+uint32_t pmm_get_free_pages()
+{
+    return free_pages;
+}
+
+uint32_t pmm_get_used_pages()
+{
+    return total_pages - free_pages;
 }

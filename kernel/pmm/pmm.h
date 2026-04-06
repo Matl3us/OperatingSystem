@@ -4,10 +4,6 @@
 #define PAGE_SIZE 4096    // 4KB
 #define BITMAP_SIZE 16384 // 512MB RAM
 
-extern uint32_t total_pages;
-extern uint32_t free_pages;
-extern uint32_t actual_pages;
-
 struct MultibootInfo
 {
     uint32_t flags; // Bitmask for valid fields in struct
@@ -33,3 +29,7 @@ struct MemMapEntry
 void pmm_init(MultibootInfo *mbi);
 void *pmm_alloc_page();
 void pmm_free_page(void *address);
+
+uint32_t pmm_get_total_pages();
+uint32_t pmm_get_free_pages();
+uint32_t pmm_get_used_pages();

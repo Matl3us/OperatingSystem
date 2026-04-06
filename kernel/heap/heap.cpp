@@ -41,3 +41,13 @@ void *kmalloc(size_t size)
 }
 
 void kfree(void *ptr) { (void)ptr; }
+
+uint32_t heap_get_pages()
+{
+    return HEAP_PAGES;
+}
+
+size_t heap_get_used_bytes()
+{
+    return position - heap_start;
+}
